@@ -6,6 +6,9 @@ import './styles-portfolio.css';
 // Import the background portrait image
 // @ts-ignore
 import portraitImg from './This_is_a_closeup_studio_portrait_of_a_young_man_w_delpmaspu.png';
+// Import the campaign concept video
+// @ts-ignore
+import campaignVideo from './BA O Som que Você escolhe ouvir 27 11 2025.mp4';
 
 interface PortfolioAppProps {
   onNavigateTo: (route: 'portfolio' | 'pedalboard' | 'psi' | 'designer') => void;
@@ -23,6 +26,7 @@ interface Project {
 
 export default function PortfolioApp({ onNavigateTo: _onNavigateTo }: PortfolioAppProps) {
   const [activeProject, setActiveProject] = useState<Project | null>(null);
+  const [activeVideo, setActiveVideo] = useState<string | null>(null);
 
   const projects: Project[] = [
     {
@@ -47,11 +51,23 @@ export default function PortfolioApp({ onNavigateTo: _onNavigateTo }: PortfolioA
 
   return (
     <div className="portfolio-wrapper">
-      {/* Full-screen Background Portrait Image */}
-      <div 
-        className="portfolio-bg-image" 
-        style={{ backgroundImage: `url(${portraitImg})` }}
-      />
+      {/* Full-screen Background Portrait Image or Video */}
+      {activeVideo ? (
+        <video 
+          key={activeVideo}
+          src={activeVideo} 
+          autoPlay 
+          loop 
+          playsInline
+          className="portfolio-bg-image"
+          style={{ objectFit: 'cover' }}
+        />
+      ) : (
+        <div 
+          className="portfolio-bg-image" 
+          style={{ backgroundImage: `url(${portraitImg})` }}
+        />
+      )}
 
       {/* Top Header */}
       <header className="portfolio-header">
@@ -59,6 +75,16 @@ export default function PortfolioApp({ onNavigateTo: _onNavigateTo }: PortfolioA
           <h1 className="portfolio-name">Gabriel Oliveira</h1>
           <span className="portfolio-role">Art Director Jr</span>
         </div>
+        
+        {activeVideo && (
+          <button 
+            className="portfolio-route-btn" 
+            onClick={() => setActiveVideo(null)}
+            title="Voltar para a foto de perfil"
+          >
+            [ VOLTAR PARA FOTO ]
+          </button>
+        )}
       </header>
 
       {/* Spaced Grid Mosaic Section */}
@@ -72,7 +98,7 @@ export default function PortfolioApp({ onNavigateTo: _onNavigateTo }: PortfolioA
           <div 
             className="portfolio-cell active-project"
             style={{ gridColumn: 1, gridRow: 2 }}
-            onClick={() => setActiveProject(projects[0])}
+            onClick={() => setActiveVideo(campaignVideo)}
           >
             <span className="portfolio-project-year">{projects[0].year}</span>
             <div className="portfolio-project-meta">
