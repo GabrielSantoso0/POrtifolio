@@ -27,6 +27,7 @@ interface Project {
 export default function PortfolioApp({ onNavigateTo: _onNavigateTo }: PortfolioAppProps) {
   const [activeProject, setActiveProject] = useState<Project | null>(null);
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
+  const [isVideoMuted, setIsVideoMuted] = useState<boolean>(false);
 
   const projects: Project[] = [
     {
@@ -58,6 +59,7 @@ export default function PortfolioApp({ onNavigateTo: _onNavigateTo }: PortfolioA
           src={activeVideo} 
           autoPlay 
           loop 
+          muted={isVideoMuted}
           playsInline
           className="portfolio-bg-image"
           style={{ objectFit: 'cover' }}
@@ -98,7 +100,10 @@ export default function PortfolioApp({ onNavigateTo: _onNavigateTo }: PortfolioA
           <div 
             className="portfolio-cell active-project"
             style={{ gridColumn: 1, gridRow: 2 }}
-            onClick={() => setActiveVideo(campaignVideo)}
+            onClick={() => {
+              setActiveVideo(campaignVideo);
+              setIsVideoMuted(false);
+            }}
           >
             <span className="portfolio-project-year">{projects[0].year}</span>
             <div className="portfolio-project-meta">
@@ -113,6 +118,13 @@ export default function PortfolioApp({ onNavigateTo: _onNavigateTo }: PortfolioA
           <div 
             className="portfolio-cell active-project"
             style={{ gridColumn: 4, gridRow: 3 }}
+            onMouseEnter={() => {
+              setActiveVideo(campaignVideo);
+              setIsVideoMuted(true);
+            }}
+            onMouseLeave={() => {
+              setActiveVideo(null);
+            }}
             onClick={() => setActiveProject(projects[1])}
           >
             <span className="portfolio-project-year">{projects[1].year}</span>
